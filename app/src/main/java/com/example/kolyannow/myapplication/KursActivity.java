@@ -109,7 +109,7 @@ public class KursActivity extends Activity {
         @Override
         protected void onPostExecute(String strJson) {
             super.onPostExecute(strJson);
-            // выводим целиком полученную json-строкуe
+            // выводим целиком полученную json-строку
 
 //            Log.d(LOG_TAG, strJson);
 
