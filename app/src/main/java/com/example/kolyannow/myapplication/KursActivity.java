@@ -78,7 +78,7 @@ public class KursActivity extends Activity {
 
         @Override
         protected String doInBackground(String... strings) {
-            // получаем данные с внешнего ресурса
+            // получаем данные с внешнего ресурса ee
             try {
                 String urrrl = "https://yobit.net/api/3/ticker/"+strings[0];
                 URL url = new URL(urrrl);
