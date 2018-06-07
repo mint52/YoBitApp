@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">YoBit</string>
+    <string name="button">Расчитать</string>
+    <string name="money_count">Количество монет, шт</string>
+    <string name="purchase_price">Цена покупки, р.</string>
+    <string name="sales_price">Цена продажи, р.</string>
+    <string name="invest_day">Срок инвеста, дней</string>
+    <string name="percent_day">Процент в день</string>
+    <string name="invest_button">Инвест</string>
+    <string name="kurs_button">Курсы</string>
+    <string name="result_pairs">результат</string>
+    <string name="autocompletetextview">Название пары</string>
+    <string name="add_pair">Добавить</string>
+    <string name="Пара">Name</string>
+    <string name="Курс">Tel</string>
+</resources>
