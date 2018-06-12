@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,6 +37,7 @@ public class KursActivity extends Activity {
     ArrayList<String> pair_list = new ArrayList<>();
     Button add;
     HashMap<String, String> map;
+    DecimalFormat df = new DecimalFormat("#.00");
 //    SimpleAdapter adapter;
 
 
@@ -55,31 +57,31 @@ public class KursActivity extends Activity {
 //        map.put("Kurs","0.5");
 //        arrayList.add(map);
 
-        SimpleAdapter adapter = new SimpleAdapter(KursActivity.this, arrayList, R.layout.list_kurs,
-                new String[]{"Pair", "Kurs"},
-                new int[]{R.id.pair, R.id.kurs});
-        listView.setAdapter(adapter);
-
-
-
-
-
     }
 
     public void addPair(View view){
         pair_list.add(autoCompleteTextView.getText().toString());
+        refreshe();
 
     }
 
-    public void refrashe(View view){
+    public void refreshe(){
         arrayList.clear();
         for (String pair: pair_list) {
             new ParseKursPair().execute(pair);
         }
-        SimpleAdapter adapter = new SimpleAdapter(KursActivity.this, arrayList, R.layout.list_kurs,
-                new String[]{"Pair", "Kurs"},
-                new int[]{R.id.pair, R.id.kurs});
-        listView.setAdapter(adapter);
+    }
+
+    public void refrashe(View view){
+        refreshe();
+//        arrayList.clear();
+//        for (String pair: pair_list) {
+//            new ParseKursPair().execute(pair);
+//        }
+//        SimpleAdapter adapter = new SimpleAdapter(KursActivity.this, arrayList, R.layout.list_kurs,
+//                new String[]{"Pair", "Kurs"},
+//                new int[]{R.id.pair, R.id.kurs});
+//        listView.setAdapter(adapter);
     }
 
 
@@ -132,9 +134,13 @@ public class KursActivity extends Activity {
                 JSONObject object = dataJsonObj.getJSONObject(array.getString(0));
                 map = new HashMap<>();
                 map.put("Pair",array.getString(0));
-                map.put("Kurs",object.getString("last"));
+                map.put("Kurs", df.format(Double.parseDouble(object.getString("last"))));
                 arrayList.add(map);
 
+                SimpleAdapter adapter = new SimpleAdapter(KursActivity.this, arrayList, R.layout.list_kurs,
+                        new String[]{"Pair", "Kurs"},
+                        new int[]{R.id.pair, R.id.kurs});
+                listView.setAdapter(adapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
