@@ -9,8 +9,9 @@
     <string name="invest_button">Инвест</string>
     <string name="kurs_button">Курсы</string>
     <string name="result_pairs">результат</string>
-    <string name="autocompletetextview">Название пары</string>
+    <string name="autocompletetextview"></string>
     <string name="add_pair">Добавить</string>
-    <string name="Пара">Name</string>
-    <string name="Курс">Tel</string>
+    <string name="pair">Pair</string>
+    <string name="kurs">Kurs</string>
+    <string name="refr">Обновить</string>
 </resources>

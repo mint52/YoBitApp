@@ -1,19 +1,19 @@
 package com.example.kolyannow.myapplication;
 
-import android.annotation.SuppressLint;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import android.support.v7.app.AppCompatActivity;
+
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
+
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -35,6 +36,9 @@ public class KursActivity extends Activity {
     ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
     ArrayList<String> pair_list = new ArrayList<>();
     Button add;
+    HashMap<String, String> map;
+    DecimalFormat df = new DecimalFormat("#.00");
+//    SimpleAdapter adapter;
 
 
 
@@ -48,24 +52,36 @@ public class KursActivity extends Activity {
         listView = findViewById(R.id.list_viev);
         add = findViewById(R.id.button5);
 
-        SimpleAdapter adapter = new SimpleAdapter(this, arrayList, android.R.layout.simple_list_item_2,
-                new String[]{"Пара", "Курс"},
-                new int[]{R.id.pair, R.id.kurs});
-        listView.setAdapter(adapter);
-
-
+//        map = new HashMap<>();
+//        map.put("Pair","liza_rur");
+//        map.put("Kurs","0.5");
+//        arrayList.add(map);
 
     }
 
     public void addPair(View view){
         pair_list.add(autoCompleteTextView.getText().toString());
-        refrashe();
+        refreshe();
+
     }
 
-    public void refrashe(){
+    public void refreshe(){
+        arrayList.clear();
         for (String pair: pair_list) {
             new ParseKursPair().execute(pair);
         }
+    }
+
+    public void refrashe(View view){
+        refreshe();
+//        arrayList.clear();
+//        for (String pair: pair_list) {
+//            new ParseKursPair().execute(pair);
+//        }
+//        SimpleAdapter adapter = new SimpleAdapter(KursActivity.this, arrayList, R.layout.list_kurs,
+//                new String[]{"Pair", "Kurs"},
+//                new int[]{R.id.pair, R.id.kurs});
+//        listView.setAdapter(adapter);
     }
 
 
@@ -78,7 +94,7 @@ public class KursActivity extends Activity {
 
         @Override
         protected String doInBackground(String... strings) {
-            // получаем данные с внешнего ресурса ee
+            // получаем данные с внешнего ресурса
             try {
                 String urrrl = "https://yobit.net/api/3/ticker/"+strings[0];
                 URL url = new URL(urrrl);
@@ -109,27 +125,26 @@ public class KursActivity extends Activity {
         @Override
         protected void onPostExecute(String strJson) {
             super.onPostExecute(strJson);
-            // выводим целиком полученную json-строку
-
-//            Log.d(LOG_TAG, strJson);
 
             JSONObject dataJsonObj = null;
-            String secondName = "";
 
             try {
                 dataJsonObj = new JSONObject(strJson);
-                JSONArray jsonArray = dataJsonObj.names();
+                JSONArray array = dataJsonObj.names();
+                JSONObject object = dataJsonObj.getJSONObject(array.getString(0));
+                map = new HashMap<>();
+                map.put("Pair",array.getString(0));
+                map.put("Kurs", df.format(Double.parseDouble(object.getString("last"))));
+                arrayList.add(map);
 
-                // 1. достаем инфо о втором друге - индекс 1
-//                JSONObject secondFriend = dataJsonObj.getJSONObject();
-//                purchase_price.setText(secondFriend.getString("avg"));
-//                sales_price.setText(secondFriend.getString("last"));
-//                Log.d(LOG_TAG, "Второе имя: " + secondName);
-
-
+                SimpleAdapter adapter = new SimpleAdapter(KursActivity.this, arrayList, R.layout.list_kurs,
+                        new String[]{"Pair", "Kurs"},
+                        new int[]{R.id.pair, R.id.kurs});
+                listView.setAdapter(adapter);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
