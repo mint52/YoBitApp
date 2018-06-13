@@ -51,12 +51,6 @@ public class KursActivity extends Activity {
         autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
         listView = findViewById(R.id.list_viev);
         add = findViewById(R.id.button5);
-
-//        map = new HashMap<>();
-//        map.put("Pair","liza_rur");
-//        map.put("Kurs","0.5");
-//        arrayList.add(map);
-
     }
 
     public void addPair(View view){
@@ -74,14 +68,6 @@ public class KursActivity extends Activity {
 
     public void refrashe(View view){
         refreshe();
-//        arrayList.clear();
-//        for (String pair: pair_list) {
-//            new ParseKursPair().execute(pair);
-//        }
-//        SimpleAdapter adapter = new SimpleAdapter(KursActivity.this, arrayList, R.layout.list_kurs,
-//                new String[]{"Pair", "Kurs"},
-//                new int[]{R.id.pair, R.id.kurs});
-//        listView.setAdapter(adapter);
     }
 
 
