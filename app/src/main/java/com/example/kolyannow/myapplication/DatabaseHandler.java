@@ -38,18 +38,18 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
     }
 
     @Override
-    public void addAccount(Account account) {
+    public void addPair(Pair pair) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, account.getName());
-        values.put(COUNT, account.getCount());
+        values.put(KEY_NAME, pair.getName());
+        values.put(COUNT, pair.getCount());
 
         db.insert(INFO_ACCOUNT, null, values);
         db.close();
     }
 
     @Override
-    public Account getInfoAccount(int id) {
+    public Pair getPair(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(INFO_ACCOUNT, new String[] { KEY_ID,
@@ -60,14 +60,14 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
             cursor.moveToFirst();
         }
 
-        Account account = new Account(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
+        Pair pair = new Pair(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
 
-        return account;
+        return pair;
     }
 
     @Override
-    public List<Account> getAllInfoAccounts() {
-        List<Account> contactList = new ArrayList<Account>();
+    public List<Pair> getAllPairs() {
+        List<Pair> contactList = new ArrayList<Pair>();
         String selectQuery = "SELECT  * FROM " + INFO_ACCOUNT;
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -75,11 +75,11 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
 
         if (cursor.moveToFirst()) {
             do {
-                Account account = new Account();
-                account.setId(Integer.parseInt(cursor.getString(0)));
-                account.setName(cursor.getString(1));
-                account.setCount(cursor.getString(2));
-                contactList.add(account);
+                Pair pair = new Pair();
+                pair.setId(Integer.parseInt(cursor.getString(0)));
+                pair.setName(cursor.getString(1));
+                pair.setCount(cursor.getString(2));
+                contactList.add(pair);
             } while (cursor.moveToNext());
         }
 
@@ -87,21 +87,21 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
     }
 
     @Override
-    public int updateInfoAccount(Account account) {
+    public int updatePair(Pair pair) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, account.getName());
-        values.put(COUNT, account.getCount());
+        values.put(KEY_NAME, pair.getName());
+        values.put(COUNT, pair.getCount());
 
         return db.update(INFO_ACCOUNT, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(account.getId()) });
+                new String[] { String.valueOf(pair.getId()) });
     }
 
     @Override
-    public void deleteInfoAccount(Account account) {
+    public void deletePair(Pair pair) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(INFO_ACCOUNT, KEY_ID + " = ?", new String[] { String.valueOf(account.getId()) });
+        db.delete(INFO_ACCOUNT, KEY_ID + " = ?", new String[] { String.valueOf(pair.getId()) });
         db.close();
     }
 
@@ -113,7 +113,7 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
     }
 
     @Override
-    public int getInfoAccountCount() {
+    public int getPairCount() {
         String countQuery = "SELECT  * FROM " + INFO_ACCOUNT;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);

@@ -1,20 +1,24 @@
 package com.example.kolyannow.myapplication;
 
-public class Account {
+public class Pair {
 
     int id;
     String name, count, price;
 
-    public Account() {
+    public Pair() {
     }
 
-    public Account(String name, String count, String price) {
+    public Pair(String name) {
+        this.name = name;
+    }
+
+    public Pair(String name, String count, String price) {
         this.name = name;
         this.count = count;
         this.price = price;
     }
 
-    public Account(int id, String name, String count) {
+    public Pair(int id, String name, String count) {
 
         this.id = id;
         this.name = name;

@@ -27,6 +27,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class KursActivity extends Activity {
 
@@ -38,14 +39,14 @@ public class KursActivity extends Activity {
     Button add;
     HashMap<String, String> map;
     DecimalFormat df = new DecimalFormat("#.00");
+    DatabaseHandler db;
 //    SimpleAdapter adapter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kurs);
+        db = new DatabaseHandler(this);
         new ParseKurs().execute();
 
         autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
@@ -53,16 +54,31 @@ public class KursActivity extends Activity {
         add = findViewById(R.id.button5);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        refreshe();
+    }
+
+    //    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        refreshe();
+//
+//    }
+
     public void addPair(View view){
-        pair_list.add(autoCompleteTextView.getText().toString());
+        db.addPair(new Pair(autoCompleteTextView.getText().toString()));
+//        pair_list.add(autoCompleteTextView.getText().toString());
         refreshe();
 
     }
 
     public void refreshe(){
         arrayList.clear();
-        for (String pair: pair_list) {
-            new ParseKursPair().execute(pair);
+        List<Pair> pairs = db.getAllPairs();
+        for (Pair pair: pairs) {
+            new ParseKursPair().execute(pair.getName());
         }
     }
 
