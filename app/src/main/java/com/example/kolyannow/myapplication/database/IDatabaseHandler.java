@@ -1,4 +1,6 @@
-package com.example.kolyannow.myapplication;
+package com.example.kolyannow.myapplication.database;
+
+import com.example.kolyannow.myapplication.Pair;
 
 import java.util.List;
 
