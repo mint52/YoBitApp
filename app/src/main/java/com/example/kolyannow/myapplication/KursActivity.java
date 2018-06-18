@@ -175,7 +175,7 @@ public class KursActivity extends Activity {
                         e.printStackTrace();
                     }
 
-                    JSONObject dataJsonObj = null;
+                    JSONObject dataJsonObj;
 
                     try {
                         dataJsonObj = new JSONObject(resultJson);
