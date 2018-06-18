@@ -107,6 +107,12 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
         db.close();
     }
 
+    public  void deletePairToName(Pair pair){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(INFO_ACCOUNT, KEY_NAME + " = ?", new String [] {String.valueOf(pair.getName())});
+        db.close();
+    }
+
     @Override
     public void deleteAll() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -124,5 +130,11 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
 
         return count;
 
+    }
+
+    public Cursor getAllData(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(INFO_ACCOUNT, null, null, null, null, null, null);
+        return cursor;
     }
 }

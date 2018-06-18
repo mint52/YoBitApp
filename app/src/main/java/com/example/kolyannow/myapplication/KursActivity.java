@@ -3,16 +3,19 @@ package com.example.kolyannow.myapplication;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.kolyannow.myapplication.adapter.KursPairAdapter;
 import com.example.kolyannow.myapplication.database.DatabaseHandler;
@@ -39,7 +42,7 @@ public class KursActivity extends Activity {
     AutoCompleteTextView autoCompleteTextView;
     ListView listView;
     ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
-    ArrayList<Pair> pairs = new ArrayList<>();
+    ArrayList<Pair> pairsList = new ArrayList<>();
     ArrayList<String> listPair = new ArrayList<>();
     ArrayList<String> pair_list = new ArrayList<>();
     Button add;
@@ -59,6 +62,22 @@ public class KursActivity extends Activity {
         listView = findViewById(R.id.list_viev);
         add = findViewById(R.id.button5);
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Pair pair = kursPairAdapter.getItem(position);
+                db.deletePairToName(pair);
+                if (db.getPairCount() != 0) {
+                    ParseKursPairThread();
+                }
+
+                Toast.makeText(getApplicationContext(), "Пара " +pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
+
+                return true;
+            }
+        });
+
 
     }
 
@@ -76,7 +95,9 @@ public class KursActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
 
-            kursPairAdapter = new KursPairAdapter(KursActivity.this, pairs);
+            kursPairAdapter = new KursPairAdapter(KursActivity.this, pairsList);
+            listView.setAdapter(kursPairAdapter);
+
 //            SimpleAdapter adapter = new SimpleAdapter(KursActivity.this, arrayList, R.layout.list_kurs,
 //                    new String[]{"Pair", "Kurs"},
 //                    new int[]{R.id.pair, R.id.kurs});
@@ -126,7 +147,8 @@ public class KursActivity extends Activity {
 
             @Override
             public void run() {
-                arrayList.clear();
+//                arrayList.clear();
+                pairsList.clear();
                 List<Pair> pairs = db.getAllPairs();
                 for (Pair pair: pairs) {
                     HttpURLConnection urlConnection = null;
@@ -162,10 +184,13 @@ public class KursActivity extends Activity {
                         dataJsonObj = new JSONObject(resultJson);
                         JSONArray array = dataJsonObj.names();
                         JSONObject object = dataJsonObj.getJSONObject(array.getString(0));
-                        map = new HashMap<>();
-                        map.put("Pair",array.getString(0));
-                        map.put("Kurs", df.format(Double.parseDouble(object.getString("last"))));
-                        arrayList.add(map);
+
+                        pairsList.add(new Pair(array.getString(0),df.format(Double.parseDouble(object.getString("last")))));
+
+//                        map = new HashMap<>();
+//                        map.put("Pair",array.getString(0));
+//                        map.put("Kurs", df.format(Double.parseDouble(object.getString("last"))));
+//                        arrayList.add(map);
 
 //                        SimpleAdapter com.example.kolyannow.myapplication.adapter = new SimpleAdapter(KursActivity.this, arrayList, R.layout.list_kurs,
 //                                new String[]{"Pair", "Kurs"},
@@ -183,6 +208,18 @@ public class KursActivity extends Activity {
         thread.start();
 
     }
+
+
+//    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//        Pair pair = kursPairAdapter.getItem(position);
+//        kursPairAdapter.remove(pair);
+//        kursPairAdapter.notifyDataSetChanged();
+//
+//        Toast.makeText(getApplicationContext(), pair.getName() + " удален", Toast.LENGTH_SHORT).show();
+//
+//        return true;
+//    }
 
 //    private class ParseKursPair extends AsyncTask<String, Void, String> {
 //

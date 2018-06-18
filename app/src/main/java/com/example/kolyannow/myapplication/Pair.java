@@ -23,7 +23,6 @@ public class Pair {
 
         this.id = id;
         this.name = name;
-        this.price = price;
     }
 
     public Pair(int id, String name, String price, String date) {
