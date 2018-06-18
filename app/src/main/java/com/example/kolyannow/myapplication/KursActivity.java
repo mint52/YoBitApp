@@ -9,7 +9,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -50,6 +54,7 @@ public class KursActivity extends Activity {
     DecimalFormat df = new DecimalFormat("#.00");
     DatabaseHandler db;
     KursPairAdapter kursPairAdapter;
+    public static final int IDM_DEL = 101;
 //    SimpleAdapter com.example.kolyannow.myapplication.adapter;
 
     @Override
@@ -61,18 +66,21 @@ public class KursActivity extends Activity {
         autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
         listView = findViewById(R.id.list_viev);
         add = findViewById(R.id.button5);
+        registerForContextMenu(listView);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Pair pair = kursPairAdapter.getItem(position);
-                db.deletePairToName(pair);
-                if (db.getPairCount() != 0) {
-                    ParseKursPairThread();
-                }
 
-                Toast.makeText(getApplicationContext(), "Пара " +pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
+
+//                Pair pair = kursPairAdapter.getItem(position);
+//                db.deletePairToName(pair);
+//                if (db.getPairCount() != 0) {
+//                    ParseKursPairThread();
+//                }
+//
+//                Toast.makeText(getApplicationContext(), "Пара " +pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
 
                 return true;
             }
@@ -121,6 +129,33 @@ public class KursActivity extends Activity {
 //        refreshe();
 //
 //    }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        final int position = adapterContextMenuInfo.position;
+
+        menu.add("Удалить").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+
+                Pair pair = kursPairAdapter.getItem(position);
+                db.deletePairToName(pair);
+                if (db.getPairCount() != 0) {
+                    ParseKursPairThread();
+                }
+
+                Toast.makeText(getApplicationContext(), "Пара " +pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
+
+
+                return true;
+            }
+        });
+
+    }
+
 
     public void addPair(View view){
         db.addPair(new Pair(autoCompleteTextView.getText().toString()));
