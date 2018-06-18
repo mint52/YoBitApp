@@ -7,8 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -60,26 +60,54 @@ public class KursActivity extends Activity {
         autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
         listView = findViewById(R.id.list_viev);
         add = findViewById(R.id.button5);
-//        registerForContextMenu(listView);
+        registerForContextMenu(listView);
 
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//
+//                Pair pair = kursPairAdapter.getItem(position);
+//                db.deletePairToName(pair);
+//                if (db.getPairCount() != 0) {
+//                    ParseKursPairThread();
+//                }
+//
+//                Toast.makeText(getApplicationContext(), "Пара " + pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
+//
+//                return true;
+//            }
+//        });
 
 
-                Pair pair = kursPairAdapter.getItem(position);
-                db.deletePairToName(pair);
-                if (db.getPairCount() != 0) {
-                    ParseKursPairThread();
-                }
+    }
 
-                Toast.makeText(getApplicationContext(), "Пара " + pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.delete:
+                deletePair(info.position);    //метод, выполняющий действие при удалении пункта меню
                 return true;
-            }
-        });
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
 
-
+    public void deletePair(int position) {
+        Pair pair = kursPairAdapter.getItem(position);
+        db.deletePairToName(pair);
+        ParseKursPairThread();
+        Toast.makeText(getApplicationContext(), "Пара " + pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
     }
 
     @Override

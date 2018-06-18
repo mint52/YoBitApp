@@ -94,9 +94,9 @@ public class DatabaseHandler extends SQLiteOpenHelper implements IDatabaseHandle
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, pair.getName());
-        values.put(COUNT, pair.getDate());
+        values.put(COUNT, pair.getPrice());
 
-        return db.update(INFO_ACCOUNT, values, KEY_ID + " = ?",
+        return db.update(INFO_ACCOUNT, values, KEY_NAME + " = ?",
                 new String[] { String.valueOf(pair.getId()) });
     }
 
