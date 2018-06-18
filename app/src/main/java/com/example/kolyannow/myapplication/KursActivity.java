@@ -56,7 +56,7 @@ public class KursActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kurs);
         db = new DatabaseHandler(this);
-        new  ParsePair().execute();
+        new ParsePair().execute();
         autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
         listView = findViewById(R.id.list_viev);
         add = findViewById(R.id.button5);
@@ -67,14 +67,13 @@ public class KursActivity extends Activity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-
                 Pair pair = kursPairAdapter.getItem(position);
                 db.deletePairToName(pair);
                 if (db.getPairCount() != 0) {
                     ParseKursPairThread();
                 }
 
-                Toast.makeText(getApplicationContext(), "Пара " +pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Пара " + pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
 
                 return true;
             }
@@ -129,13 +128,13 @@ public class KursActivity extends Activity {
 //    }
 
 
-    public void addPair(View view){
+    public void addPair(View view) {
         db.addPair(new Pair(autoCompleteTextView.getText().toString()));
         ParseKursPairThread();
 
     }
 
-    public void refrashe(View view){
+    public void refrashe(View view) {
         ParseKursPairThread();
     }
 
@@ -148,13 +147,13 @@ public class KursActivity extends Activity {
 //                arrayList.clear();
                 pairsList.clear();
                 List<Pair> pairs = db.getAllPairs();
-                for (Pair pair: pairs) {
+                for (Pair pair : pairs) {
                     HttpURLConnection urlConnection = null;
                     BufferedReader reader = null;
                     String resultJson = "";
 
                     try {
-                        URL url = new URL("https://yobit.net/api/3/ticker/"+pair.getName());
+                        URL url = new URL("https://yobit.net/api/3/ticker/" + pair.getName());
 
                         urlConnection = (HttpURLConnection) url.openConnection();
                         urlConnection.setRequestMethod("GET");
@@ -183,7 +182,7 @@ public class KursActivity extends Activity {
                         JSONArray array = dataJsonObj.names();
                         JSONObject object = dataJsonObj.getJSONObject(array.getString(0));
 
-                        pairsList.add(new Pair(array.getString(0),df.format(Double.parseDouble(object.getString("last")))));
+                        pairsList.add(new Pair(array.getString(0), df.format(Double.parseDouble(object.getString("last")))));
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -191,7 +190,7 @@ public class KursActivity extends Activity {
                 }
                 handler.sendEmptyMessage(0);
 
-                }
+            }
         };
         Thread thread = new Thread(runnable);
         thread.start();
@@ -207,7 +206,7 @@ public class KursActivity extends Activity {
 
         @Override
         protected String doInBackground(Void... params) {
-//             получаем данные с внешнего ресурса
+
             try {
                 URL url = new URL("https://yobit.net/api/3/info");
 
@@ -236,9 +235,6 @@ public class KursActivity extends Activity {
         @Override
         protected void onPostExecute(String strJson) {
             super.onPostExecute(strJson);
-            // выводим целиком полученную json-строку
-
-            Log.d(LOG_TAG, strJson);
 
             JSONObject dataJsonObj = null;
             ArrayList<String> list = new ArrayList<>();
@@ -248,7 +244,7 @@ public class KursActivity extends Activity {
                 JSONObject pair = dataJsonObj.getJSONObject("pairs");
                 JSONArray pairs = pair.names();
 
-                for (int i = 0; i < pairs.length(); i++){
+                for (int i = 0; i < pairs.length(); i++) {
                     list.add(pairs.getString(i));
                 }
             } catch (JSONException e) {
