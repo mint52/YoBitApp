@@ -61,25 +61,6 @@ public class KursActivity extends Activity {
         listView = findViewById(R.id.list_viev);
         add = findViewById(R.id.button5);
         registerForContextMenu(listView);
-
-//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//
-//                Pair pair = kursPairAdapter.getItem(position);
-//                db.deletePairToName(pair);
-//                if (db.getPairCount() != 0) {
-//                    ParseKursPairThread();
-//                }
-//
-//                Toast.makeText(getApplicationContext(), "Пара " + pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
-//
-//                return true;
-//            }
-//        });
-
-
     }
 
 
@@ -130,32 +111,6 @@ public class KursActivity extends Activity {
         }
     };
 
-//    @Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//
-//        AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
-//        final int position = adapterContextMenuInfo.position;
-//
-//        menu.add("Удалить").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//
-//                Pair pair = kursPairAdapter.getItem(position);
-//                db.deletePairToName(pair);
-//                if (db.getPairCount() != 0) {
-//                    ParseKursPairThread();
-//                }
-//
-//                Toast.makeText(getApplicationContext(), "Пара " +pair.getName() + " удалена", Toast.LENGTH_SHORT).show();
-//
-//
-//                return true;
-//            }
-//        });
-//
-//    }
-
-
     public void addPair(View view) {
         db.addPair(new Pair(autoCompleteTextView.getText().toString()));
         ParseKursPairThread();
@@ -165,7 +120,6 @@ public class KursActivity extends Activity {
     public void refrashe(View view) {
         ParseKursPairThread();
     }
-
 
     public void ParseKursPairThread() {
         Runnable runnable = new Runnable() {
